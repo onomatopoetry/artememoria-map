@@ -1,0 +1,78 @@
+.mapa-zona-centro {
+	position: relative;
+}
+
+#map-viewport,#key {
+	max-height: 650px;
+}
+
+#map-viewport {
+	display: inline-block;
+	max-width: 1000px;
+	overflow: hidden;
+	position: relative;
+}
+
+#map-container {
+	position: relative;
+	display: inline-block;
+}
+
+#map-zoom-in,#map-zoom-out {
+	position: absolute;
+	left: 10px;
+	background-color: #6d8280;
+	border-color: white;
+	color: white;
+	font-size: 20px;
+	width: 40px;
+	height: 40px;
+	border-radius: 2px;
+}
+
+#map-zoom-in:active,#map-zoom-out:active {
+	background-color: #cbd6d4;
+	color: #6d8280;
+}
+
+#map-zoom-in {
+	top: 10px;
+}
+
+#map-zoom-out {
+	top: 60px;
+}
+
+#point-info {
+	display: none;
+	background-color: white;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	align-items: center;
+	justify-content: center;
+}
+
+#point-return {
+	border-top: 3px solid #666;
+	cursor: pointer;
+	position: absolute;
+	bottom: 0;
+	color: #666;
+	font-weight: bold;
+	font-size: 1.5em;
+	text-align: center;
+	width: 100%;
+	padding: 0.5em 0;
+}
+
+.point {
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+	background-color: blue;
+	border-radius: 50%;
+	position: absolute;
+}
