@@ -10,14 +10,60 @@
 	<div class="mapa-zona-centro">
 		<div id="map-viewport">
 			<div id="map-container">
-				<img id="map" src="img/map.jpg">
+				<img id="map" src="img/map.png">
 			</div>
 			<div id="point-info">
 				<p id="point-info-text"></p>
 				<div id="point-return">&larr; Return to Map</div>
 			</div>
 		</div>
-		<img id="key" src="img/key.jpg">
+		<div class="key">
+			<img class="zoom-out" src="img/zoom_out.png">
+			<label for="coup" class="key-check" >
+				<input type="checkbox" id="coup" class="key-input" checked>
+				THE 1964 COUP D’ÉTAT
+			</label>
+			<label for="cultural" class="key-check">
+				<input type="checkbox" id="cultural" class="key-input" checked>
+				POLITICAL-CULTURAL RESISTANCE AND MEMORY
+			</label>
+			<label for="respressive" class="key-check">
+				<input type="checkbox" id="respressive" class="key-input" checked>
+				REPRESSIVE STRUCTURES
+			</label>
+			<label for="c-c" class="key-check">
+				<input type="checkbox" id="c-c" class="key-input" checked>
+				CIVIL AND CORPORATE PARTICIPATION
+			</label>
+			<label for="labor" class="key-check">
+				<input type="checkbox" id="labor" class="key-input" checked>
+				UNIONS AND WORKERS
+			</label>
+			<label for="students" class="key-check">
+				<input type="checkbox" id="students" class="key-input" checked>
+				UNIVERSITIES AND THE STUDENT MOVEMENT
+			</label>
+			<label for="church" class="key-check">
+				<input type="checkbox" id="church" class="key-input" checked>
+				ACTIONS BY THE CATHOLIC CHURCH
+			</label>
+			<label for="racism" class="key-check">
+				<input type="checkbox" id="racism" class="key-input" checked>
+				STATE RACISM AND BLACK RESISTANCE
+			</label>
+			<label for="favelas" class="key-check">
+				<input type="checkbox" id="favelas" class="key-input" checked>
+				FAVELA DISPLACEMENTS
+			</label>
+			<label for="homosexuality" class="key-check">
+				<input type="checkbox" id="homosexuality" class="key-input" checked>
+				HOMOSEXUALITY AND DICTATORSHIP
+			</label>
+			<label for="gender" class="key-check">
+				<input type="checkbox" id="gender" class="key-input" checked>
+				GENDERED VIOLENCE
+			</label>
+		</div>
 		<button id="map-zoom-in">+</button>
 		<button id="map-zoom-out">-</button>
 	</div>
@@ -27,16 +73,40 @@
 	var pointOffsetX = 12,
 		pointOffsetY = 12,
 		poi = [
-		{
-			x: 1052,
-			y: 1318,
-			text: "A great and wonderful place, full of joy and laughter."
-		},
-		{
-			x: 1985,
-			y: 1005,
-			text: "A seaside getaway."
-		}
+		{number: 1, x: 1862, y: 1395, text: 'placholder', categories: ['coup','respressive', 'gender']},
+		{number: 2, x: 1810, y: 1431, text: 'placholder', categories: ['racism']},
+		{number: 3, x: 1905, y: 1400, text: 'placholder', categories: ['coup', 'cultural', 'favelas']},
+		{number: 4, x: 2089, y: 1553, text: 'placholder', categories: ['cultural', 'favelas', 'homosexuality']},
+		{number: 5, x: 2066, y: 1556, text: 'placholder', categories: ['labor']},
+		{number: 6, x: 2066, y: 1480, text: 'placholder', categories: ['coup']},
+		{number: 7, x: 1436, y: 1477, text: 'placholder', categories: ['respressive']},
+		{number: 8, x: 1587, y: 1551, text: 'placholder', categories: ['church']},
+		{number: 9, x: 2122, y: 1402, text: 'placholder', categories: ['coup','respressive', 'c-c', 'students', 'cultural', 'favelas', 'homosexuality']},
+		{number: 10, x: 2148, y: 1349, text: 'placholder', categories: ['c-c', 'cultural', 'favelas']},
+		{number: 11, x: 2245, y: 1401, text: 'placholder', categories: ['students']},
+		{number: 12, x: 2293, y: 1359, text: 'placholder', categories: ['c-c', 'cultural', 'favelas']},
+		{number: 13, x: 2314, y: 1240, text: 'placholder', categories: ['c-c']},
+		{number: 14, x: 2313, y: 1276, left: '0.75em', top: '-0.25em', text: 'placholder', categories: ['students']},
+		{number: 15, x: 2223, y: 1482, text: 'placholder', categories: ['cultural', 'favelas']},
+		{number: 16, x: 1716, y: 1196, text: 'placholder', categories: ['coup']},
+		{number: 17, x: 1722, y: 1298, left: '-1.25em', top: '-0.5em', text: 'placholder', categories: ['respressive']},
+		{number: 18, x: 1736, y: 1312, left: '0.75em', top: '-0.25em', text: 'placholder', categories: ['students']},
+		{number: 19, x: 1841, y: 1315, text: 'placholder'},
+		{number: 20, x: 1555, y: 1284, text: 'placholder', categories: ['racism', 'cultural', 'favelas']},
+		{number: 21, x: 1797, y: 1173, text: 'placholder', categories: ['respressive']},
+		{number: 22, x: 1884, y: 1138, text: 'placholder', categories: ['students']},
+		{number: 23, x: 2078, y: 1109, left: '-0.5em', text: 'placholder', categories: ['coup', 'respressive', 'c-c', 'students', 'church', 'racism', 'cultural', 'favelas']},
+		{number: 24, x: 1985, y: 1002, text: "A great and wonderful place, full of joy and laughter.", categories: ['coup']},
+		{number: 25, x: 2275, y: 926, text: 'placholder', categories: ['respressive']},
+		{number: 26, x: 1997, y: 1130, text: 'placholder', categories: ['labor']},
+		{number: 27, x: 2060, y: 1239, left: '-0.7em', top: '0.7em', text: 'placholder', categories: ['cultural', 'favelas']},
+		{number: 28, x: 2062, y: 1214, left:'-1em', top: '-1em', text: 'placholder', categories: ['c-c']},
+		{number: 29, x: 1977, y: 1240, text: 'placholder', categories: ['students', 'cultural', 'favelas']},
+		{number: 30, x: 1283, y: 357, text: 'placholder', categories: ['c-c']},
+		{number: 31, x: 2110, y: 1090, text: 'placholder', categories: ['labor']},
+		{number: 32, x: 1048, y: 1317, text: 'placholder', categories: ['c-c', 'cultural', 'favelas']},
+		{number: 33, x: 464, y: 1030, text: 'placholder', categories: ['labor']},
+		{number: 34, x: 326, y: 913, text: 'placholder', categories: ['respressive']}
 	];
 
 	var map = document.getElementById('map'),
@@ -47,6 +117,7 @@
 		pointInfo = document.getElementById('point-info'),
 		pointText = document.getElementById('point-info-text'),
 		pointReturn = document.getElementById('point-return'),
+		categoryCheckboxes = document.getElementsByClassName('key-input'),
 		dragging = false,
 		mapScale = 1,
 		minScale, offsetX, offsetY;
@@ -80,7 +151,7 @@
 			
 			if(e.target == point.el) {
 				pointInfo.style.display = 'flex';
-				pointText.innerHTML = point.text;
+				pointText.innerHTML = point.number + ': ' + point.text;
 				break;
 			}
 		}
@@ -88,6 +159,34 @@
 
 	function handleHidePoint() {
 		pointInfo.style.display = 'none';
+	}
+
+	function handleToggleCategory(e) {
+		var checkbox = e.target,
+			checkboxCategory = checkbox.id,
+			categoryPoints = document.getElementsByClassName(checkboxCategory);
+
+		for(var i = 0; i < categoryPoints.length; i++) {
+			var point = categoryPoints.item(i),
+				pointIsVisible = false;
+
+			point.classList.forEach(function(value) {
+				if (value != 'point' && value != 'hidden-point') {
+					var classCheckbox = document.getElementById(value);
+
+					if (classCheckbox.checked) {
+						pointIsVisible = true;
+						return;
+					}
+				}
+			});
+
+			if (pointIsVisible) {
+				point.classList.remove('hidden-point');
+			} else {
+				point.classList.add('hidden-point');
+			}
+		}
 	}
 
 	function setMapScale(scale) {
@@ -142,13 +241,28 @@
 	function initPOI() {
 		for(var p in poi) {
 			var point = poi[p],
-				pointEl = document.createElement('div');
+				pointEl = document.createElement('div'),
+				pointNumber = document.createElement('span');
+
+			pointNumber.innerHTML = point.number;
+			pointNumber.classList.add('point-number');
+			if (point.left) {
+				pointNumber.style.left = point.left;
+			}
+			if (point.top) {
+				pointNumber.style.top = point.top;
+			}
+			pointEl.appendChild(pointNumber);
 
 			point.el = pointEl;
 
 			pointEl.classList.add('point');
 			pointEl.style.top = point.y - pointOffsetX + 'px';
 			pointEl.style.left = point.x - pointOffsetY + 'px';
+
+			for(var p in point.categories) {
+				pointEl.classList.add(point.categories[p]);
+			}
 
 			pointEl.addEventListener('click', handleShowPoint);
 
@@ -168,6 +282,11 @@
 	});
 
 	pointReturn.addEventListener('click', handleHidePoint);
+
+	for(var i = 0; i < categoryCheckboxes.length; i++) {
+		var categoryCheckbox = categoryCheckboxes.item(i);
+		categoryCheckbox.addEventListener('change', handleToggleCategory);
+	}
 
 	if (map.complete) {
 		init();

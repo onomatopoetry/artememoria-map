@@ -2,8 +2,28 @@
 	position: relative;
 }
 
-#map-viewport,#key {
-	max-height: 650px;
+#map-viewport,.key {
+	height: 650px;
+}
+
+.key {
+	display: inline-block;
+	background-color: #ccc;
+	padding: 1em;
+	vertical-align: top;
+	box-sizing: border-box;
+}
+
+.zoom-out {
+	width: 300px;
+}
+
+.key-check {
+	display: block;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	padding: 0.1em 0;
+	max-width: 300px;
 }
 
 #map-viewport {
@@ -72,7 +92,19 @@
 	cursor: pointer;
 	width: 20px;
 	height: 20px;
-	background-color: blue;
+	background-color: red;
 	border-radius: 50%;
 	position: absolute;
+}
+
+.hidden-point {
+	display: none;
+}
+
+.point-number {
+	position: absolute;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 32px;
+	color: red;
+	top: -1.25em;
 }
