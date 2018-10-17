@@ -109,189 +109,190 @@
 		{number: 34, x: 326, y: 913, text: 'placholder', categories: ['respressive']}
 	];
 
-	var map = document.getElementById('map'),
-		container = document.getElementById('map-container'),
-		viewport = document.getElementById('map-viewport'),
-		zoomInBtn = document.getElementById('map-zoom-in'),
-		zoomOutBtn = document.getElementById('map-zoom-out'),
-		pointInfo = document.getElementById('point-info'),
-		pointText = document.getElementById('point-info-text'),
-		pointReturn = document.getElementById('point-return'),
-		categoryCheckboxes = document.getElementsByClassName('key-input'),
-		dragging = false,
-		mapScale = 1,
-		minScale, offsetX, offsetY;
+	var artememoriaMap = {
+		map: document.getElementById('map'),
+		container: document.getElementById('map-container'),
+		viewport: document.getElementById('map-viewport'),
+		zoomInBtn: document.getElementById('map-zoom-in'),
+		zoomOutBtn: document.getElementById('map-zoom-out'),
+		pointInfo: document.getElementById('point-info'),
+		pointText: document.getElementById('point-info-text'),
+		pointReturn: document.getElementById('point-return'),
+		categoryCheckboxes: document.getElementsByClassName('key-input'),
+		dragging: false,
+		mapScale: 1,
 
-	function handleStartDrag(e) {
-		e.preventDefault();
+		handleStartDrag: function(e) {
+			e.preventDefault();
 
-		if(e.target.classList.contains('point')) {
-			return;
-		}
-
-		dragging = true;
-		offsetX = e.offsetX;
-		offsetY = e.offsetY;
-	}
-
-	function handleDragging(e) {
-		if (dragging) {
-			var mapPos = getMapPosition();			
-			setMapPosition(mapPos.left + e.movementX, mapPos.top + e.movementY);
-		}
-	}
-
-	function handleStopDrag(e) {
-		dragging = false;
-	}
-
-	function handleShowPoint(e) {
-		for(var p in poi) {
-			var point = poi[p];
-			
-			if(e.target == point.el) {
-				pointInfo.style.display = 'flex';
-				pointText.innerHTML = point.number + ': ' + point.text;
-				break;
+			if(e.target.classList.contains('point')) {
+				return;
 			}
-		}
-	}
 
-	function handleHidePoint() {
-		pointInfo.style.display = 'none';
-	}
+			artememoriaMap.dragging = true;
+			artememoriaMap.offsetX = e.offsetX;
+			artememoriaMap.offsetY = e.offsetY;
+		},
 
-	function handleToggleCategory(e) {
-		var checkbox = e.target,
-			checkboxCategory = checkbox.id,
-			categoryPoints = document.getElementsByClassName(checkboxCategory);
+		handleDragging: function(e) {
+			if (artememoriaMap.dragging) {
+				var mapPos = artememoriaMap.getMapPosition();			
+				artememoriaMap.setMapPosition(mapPos.left + e.movementX, mapPos.top + e.movementY);
+			}
+		},
 
-		for(var i = 0; i < categoryPoints.length; i++) {
-			var point = categoryPoints.item(i),
-				pointIsVisible = false;
+		handleStopDrag: function(e) {
+			artememoriaMap.dragging = false;
+		},
 
-			point.classList.forEach(function(value) {
-				if (value != 'point' && value != 'hidden-point') {
-					var classCheckbox = document.getElementById(value);
-
-					if (classCheckbox.checked) {
-						pointIsVisible = true;
-						return;
-					}
+		handleShowPoint: function(e) {
+			for(var p in poi) {
+				var point = poi[p];
+				
+				if(e.target == point.el) {
+					artememoriaMap.pointInfo.style.display = 'flex';
+					artememoriaMap.pointText.innerHTML = point.number + ': ' + point.text;
+					break;
 				}
-			});
+			}
+		},
 
-			if (pointIsVisible) {
-				point.classList.remove('hidden-point');
-			} else {
-				point.classList.add('hidden-point');
+		handleHidePoint: function() {
+			artememoriaMap.pointInfo.style.display = 'none';
+		},
+
+		 handleToggleCategory: function(e) {
+			var checkbox = e.target,
+				checkboxCategory = checkbox.id,
+				categoryPoints = document.getElementsByClassName(checkboxCategory);
+
+			for(var i = 0; i < categoryPoints.length; i++) {
+				var point = categoryPoints.item(i),
+					pointIsVisible = false;
+
+				point.classList.forEach(function(value) {
+					if (value != 'point' && value != 'hidden-point') {
+						var classCheckbox = document.getElementById(value);
+
+						if (classCheckbox.checked) {
+							pointIsVisible = true;
+							return;
+						}
+					}
+				});
+
+				if (pointIsVisible) {
+					point.classList.remove('hidden-point');
+				} else {
+					point.classList.add('hidden-point');
+				}
+			}
+		},
+
+		setMapScale: function(scale) {
+			var mapPos = artememoriaMap.getMapPosition();
+
+			artememoriaMap.mapScale = Math.max(Math.min(scale, 1), artememoriaMap.minScale);
+			artememoriaMap.container.style.transform = 'scale(' + artememoriaMap.mapScale + ',' + artememoriaMap.mapScale + ')';
+
+			//make sure the map stays within the viewport when it's being scaled down.
+			var boundedMapPos = artememoriaMap.setMapPosition(mapPos.left, mapPos.top);
+		},
+
+		getMapPosition: function() {
+			var left = artememoriaMap.container.style.left || '0px',
+				top = artememoriaMap.container.style.top || '0px';
+
+			left = Number(left.substring(0, left.length - 2));
+			top = Number(top.substring(0, top.length - 2));
+
+			return {left: left, top: top};
+		},
+
+		setMapPosition: function(left, top) {
+			var mapRect = artememoriaMap.container.getBoundingClientRect(),
+				mapTopBound = (mapRect.height - artememoriaMap.map.offsetHeight) / 2,
+				mapLeftBound = (mapRect.width - artememoriaMap.map.offsetWidth) / 2,
+				mapRightBound = artememoriaMap.viewport.offsetWidth - mapRect.width + mapLeftBound,
+				mapBottomBound = artememoriaMap.viewport.offsetHeight - mapRect.height + mapTopBound,
+				newLeft = Math.max(Math.min(left, mapLeftBound), mapRightBound),
+				newTop = Math.max(Math.min(top, mapTopBound), mapBottomBound);
+
+			artememoriaMap.container.style.left = newLeft + 'px';
+			artememoriaMap.container.style.top = newTop + 'px';
+		},
+
+		init: function() {
+			artememoriaMap.initPOI();
+			artememoriaMap.initMapPosition();
+		},
+
+		initMapPosition: function() {
+			//initialize the minimum scale for the map. Round to two decimal places so that the map will always be slightly larger than the container.
+			artememoriaMap.minScale = Math.round((artememoriaMap.viewport.offsetWidth / artememoriaMap.map.offsetWidth + 0.00001) * 100) / 100
+
+			//initialize the width of the map to be double the width of the viewport.
+			artememoriaMap.setMapScale(artememoriaMap.viewport.offsetWidth * 2 / artememoriaMap.map.offsetWidth);
+
+			artememoriaMap.container.style.left = ((artememoriaMap.viewport.offsetWidth - artememoriaMap.map.offsetWidth) / 2) + 'px';
+			artememoriaMap.container.style.top = ((artememoriaMap.viewport.offsetHeight - artememoriaMap.map.offsetHeight) / 2) + 'px';
+		},
+
+		initPOI: function() {
+			for(var p in poi) {
+				var point = poi[p],
+					pointEl = document.createElement('div'),
+					pointNumber = document.createElement('span');
+
+				pointNumber.innerHTML = point.number;
+				pointNumber.classList.add('point-number');
+				if (point.left) {
+					pointNumber.style.left = point.left;
+				}
+				if (point.top) {
+					pointNumber.style.top = point.top;
+				}
+				pointEl.appendChild(pointNumber);
+
+				point.el = pointEl;
+
+				pointEl.classList.add('point');
+				pointEl.style.top = point.y - pointOffsetX + 'px';
+				pointEl.style.left = point.x - pointOffsetY + 'px';
+
+				for(var p in point.categories) {
+					pointEl.classList.add(point.categories[p]);
+				}
+
+				pointEl.addEventListener('click', artememoriaMap.handleShowPoint);
+
+				artememoriaMap.container.appendChild(pointEl);
 			}
 		}
 	}
 
-	function setMapScale(scale) {
-		var mapPos = getMapPosition();
+	artememoriaMap.container.addEventListener('mousedown', artememoriaMap.handleStartDrag);
+	artememoriaMap.container.addEventListener('mousemove', artememoriaMap.handleDragging);
+	document.addEventListener('mouseup', artememoriaMap.handleStopDrag);
 
-		mapScale = Math.max(Math.min(scale, 1), minScale);
-		container.style.transform = 'scale(' + mapScale + ',' + mapScale + ')';
-
-		//make sure the map stays within the viewport when it's being scaled down.
-		var boundedMapPos = setMapPosition(mapPos.left, mapPos.top);
-	}
-
-	function getMapPosition() {
-		var left = container.style.left || '0px',
-			top = container.style.top || '0px';
-
-		left = Number(left.substring(0, left.length - 2));
-		top = Number(top.substring(0, top.length - 2));
-
-		return {left: left, top: top};
-	}
-
-	function setMapPosition(left, top) {
-		var mapRect = container.getBoundingClientRect(),
-			mapTopBound = (mapRect.height - map.offsetHeight) / 2,
-			mapLeftBound = (mapRect.width - map.offsetWidth) / 2,
-			mapRightBound = viewport.offsetWidth - mapRect.width + mapLeftBound,
-			mapBottomBound = viewport.offsetHeight - mapRect.height + mapTopBound,
-			newLeft = Math.max(Math.min(left, mapLeftBound), mapRightBound),
-			newTop = Math.max(Math.min(top, mapTopBound), mapBottomBound);
-
-		container.style.left = newLeft + 'px';
-		container.style.top = newTop + 'px';
-	}
-
-	function init() {
-		initPOI();
-		initMapPosition();
-	}
-
-	function initMapPosition() {
-		//initialize the minimum scale for the map. Round to two decimal places so that the map will always be slightly larger than the container.
-		minScale = Math.round((viewport.offsetWidth / map.offsetWidth + 0.00001) * 100) / 100
-
-		//initialize the width of the map to be double the width of the viewport.
-		setMapScale(viewport.offsetWidth * 2 / map.offsetWidth);
-
-		container.style.left = ((viewport.offsetWidth - map.offsetWidth) / 2) + 'px';
-		container.style.top = ((viewport.offsetHeight - map.offsetHeight) / 2) + 'px';
-	}
-
-	function initPOI() {
-		for(var p in poi) {
-			var point = poi[p],
-				pointEl = document.createElement('div'),
-				pointNumber = document.createElement('span');
-
-			pointNumber.innerHTML = point.number;
-			pointNumber.classList.add('point-number');
-			if (point.left) {
-				pointNumber.style.left = point.left;
-			}
-			if (point.top) {
-				pointNumber.style.top = point.top;
-			}
-			pointEl.appendChild(pointNumber);
-
-			point.el = pointEl;
-
-			pointEl.classList.add('point');
-			pointEl.style.top = point.y - pointOffsetX + 'px';
-			pointEl.style.left = point.x - pointOffsetY + 'px';
-
-			for(var p in point.categories) {
-				pointEl.classList.add(point.categories[p]);
-			}
-
-			pointEl.addEventListener('click', handleShowPoint);
-
-			container.appendChild(pointEl);
-		}
-	}
-
-	container.addEventListener('mousedown', handleStartDrag);
-	container.addEventListener('mousemove', handleDragging);
-	document.addEventListener('mouseup', handleStopDrag);
-
-	zoomInBtn.addEventListener('click', function() {
-		setMapScale(mapScale + 0.1);
+	artememoriaMap.zoomInBtn.addEventListener('click', function() {
+		artememoriaMap.setMapScale(artememoriaMap.mapScale + 0.1);
 	});
-	zoomOutBtn.addEventListener('click', function() {
-		setMapScale(mapScale - 0.1);
+	artememoriaMap.zoomOutBtn.addEventListener('click', function() {
+		artememoriaMap.setMapScale(artememoriaMap.mapScale - 0.1);
 	});
 
-	pointReturn.addEventListener('click', handleHidePoint);
+	artememoriaMap.pointReturn.addEventListener('click', artememoriaMap.handleHidePoint);
 
-	for(var i = 0; i < categoryCheckboxes.length; i++) {
-		var categoryCheckbox = categoryCheckboxes.item(i);
-		categoryCheckbox.addEventListener('change', handleToggleCategory);
+	for(var i = 0; i < artememoriaMap.categoryCheckboxes.length; i++) {
+		var categoryCheckbox = artememoriaMap.categoryCheckboxes.item(i);
+		categoryCheckbox.addEventListener('change', artememoriaMap.handleToggleCategory);
 	}
 
-	if (map.complete) {
-		init();
+	if (artememoriaMap.map.complete) {
+		artememoriaMap.init();
 	} else {
-		map.addEventListener('load', init);
+		artememoriaMap.map.addEventListener('load', artememoriaMap.init);
 	}
 </script>
 
